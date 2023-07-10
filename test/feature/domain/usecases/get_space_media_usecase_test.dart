@@ -28,13 +28,13 @@ void main() {
   final tNoParams = NoParams();
 
   test('should get space media entity for a given date from the repository',
-      () {
+      () async {
     when(() => repository.getSpaceMediaFromDate()).thenAnswer(
       (_) async => const Right(tSpaceMedia),
     );
 
-    final result = usecase(tNoParams);
+    final result = await usecase(tNoParams);
     expect(result, const Right(tSpaceMedia));
-    verify.call(repository.getSpaceMediaFromDate());
+    verify.call(repository.getSpaceMediaFromDate);
   });
 }
