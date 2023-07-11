@@ -5,13 +5,14 @@ import 'package:nasa_image_clean_architecture/feature/domain/entities/space_medi
 
 import '../repositories/space_media_repository.dart';
 
-class GetSpaceMediaUsecase implements Usecase<SpaceMediaEntity, NoParams> {
+class GetSpaceMediaFromDateUsecase
+    implements Usecase<SpaceMediaEntity, DateTime> {
   final ISpaceMediaRepository repository;
 
-  GetSpaceMediaUsecase(this.repository);
+  GetSpaceMediaFromDateUsecase(this.repository);
 
   @override
-  Future<Either<Failure, SpaceMediaEntity>> call(NoParams params) async {
-    return await repository.getSpaceMediaFromDate();
+  Future<Either<Failure, SpaceMediaEntity>> call(DateTime date) async {
+    return await repository.getSpaceMediaFromDate(date);
   }
 }
