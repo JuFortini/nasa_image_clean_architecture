@@ -17,7 +17,7 @@ void main() {
     usecase = GetSpaceMediaFromDateUsecase(repository);
   });
 
-  const tSpaceMedia = SpaceMediaEntity(
+  const tSpaceMediaEntity = SpaceMediaEntity(
     title: 'Test media title',
     mediaUrl:
         'https://images.unsplash.com/photo-1454789548928-9efd52dc4031?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=580&q=80',
@@ -30,21 +30,21 @@ void main() {
   test('should get space media entity for a given date from the repository',
       () async {
     when(() => repository.getSpaceMediaFromDate(tDate)).thenAnswer(
-      (_) async => const Right(tSpaceMedia),
+      (_) async => const Right(tSpaceMediaEntity),
     );
 
     final result = await usecase(tDate);
-    expect(result, const Right(tSpaceMedia));
-    verify(() => repository.getSpaceMediaFromDate(tDate));
+    expect(result, const Right(tSpaceMediaEntity));
+    verify(() => repository.getSpaceMediaFromDate(tDate)).called(1);
   });
 
-  test('should return a Failure when do not succeed', () async {
+  test('should return a ServerFailure when do not succeed', () async {
     when(() => repository.getSpaceMediaFromDate(tDate)).thenAnswer(
       (_) async => Left<Failure, SpaceMediaEntity>(ServerFailure()),
     );
 
     final result = await usecase(tDate);
     expect(result, Left(ServerFailure()));
-    verify(() => repository.getSpaceMediaFromDate(tDate));
+    verify(() => repository.getSpaceMediaFromDate(tDate)).called(1);
   });
 }
