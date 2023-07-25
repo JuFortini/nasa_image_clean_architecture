@@ -1,9 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:nasa_image_clean_architecture/core/usecase/errors/exceptions.dart';
+import 'package:nasa_image_clean_architecture/core/usecase/errors/failures.dart';
 import 'package:nasa_image_clean_architecture/feature/data/datasources/space_media_datasource.dart';
 import 'package:nasa_image_clean_architecture/feature/data/models/space_media_model.dart';
 import 'package:nasa_image_clean_architecture/feature/data/repositories/space_media_repository_implementation.dart';
+import 'package:nasa_image_clean_architecture/feature/domain/entities/space_media_entity.dart';
 
 class MockSpaceMediaDatasource extends Mock implements ISpaceMediaDatasource {}
 
@@ -28,13 +31,24 @@ void main() {
 
   test('should return space media model when calls the datasource', () async {
     // Arrange
-    when(() => datasource.getSpaceMediaFromDate()).thenAnswer(
+    when(() => datasource.getSpaceMediaFromDate(tDate)).thenAnswer(
       (_) async => tSpaceMediaModel,
     );
     // Act
     final result = await repository.getSpaceMediaFromDate(tDate);
     // Assert
     expect(result, const Right(tSpaceMediaModel));
+    verify(() => datasource.getSpaceMediaFromDate(tDate)).called(1);
+  });
+
+  test(
+      'should return a server failure when the call to datasource is unsuccessful',
+      () async {
+    when(() => datasource.getSpaceMediaFromDate(tDate))
+        .thenThrow(ServerException());
+
+    final result = await repository.getSpaceMediaFromDate(tDate);
+    expect(result, Left(ServerFailure()));
     verify(() => datasource.getSpaceMediaFromDate(tDate)).called(1);
   });
 }

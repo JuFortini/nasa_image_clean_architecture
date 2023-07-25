@@ -1,3 +1,4 @@
+import 'package:nasa_image_clean_architecture/core/usecase/errors/exceptions.dart';
 import 'package:nasa_image_clean_architecture/feature/domain/entities/space_media_entity.dart';
 import 'package:nasa_image_clean_architecture/core/usecase/errors/failures.dart';
 import 'package:dartz/dartz.dart';
@@ -13,8 +14,12 @@ class SpaceMediaRepositoryImplementation implements ISpaceMediaRepository {
   @override
   Future<Either<Failure, SpaceMediaEntity>> getSpaceMediaFromDate(
     DateTime date,
-  ) {
-    // TODO: implement getSpaceMediaFromDate
-    throw UnimplementedError();
+  ) async {
+    try {
+      final result = await datasource.getSpaceMediaFromDate(date);
+      return Right(result);
+    } on ServerException {
+      return Left(ServerFailure());
+    }
   }
 }
