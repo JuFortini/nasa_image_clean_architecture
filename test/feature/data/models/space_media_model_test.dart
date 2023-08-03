@@ -24,4 +24,16 @@ void main() {
     final result = SpaceMediaModel.fromJson(jsonMap);
     expect(result, tSpaceMediaModel);
   });
+
+  test('should return a json map containing the proper data', () {
+    final expectedMap = {
+      "explanation": "Test media description",
+      "media_type": "image",
+      "title": "Test media title",
+      "url":
+          "https://images.unsplash.com/photo-1454789548928-9efd52dc4031?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=580&q=80"
+    };
+    final result = tSpaceMediaModel.toJson();
+    expect(result, expectedMap);
+  });
 }
